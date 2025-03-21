@@ -21,8 +21,8 @@ export default function ExtensionIdTable({
           <TableRow>
             <TableHead className="text-left w-1/10 font-bold">
             </TableHead>
-            <TableHead className="text-left w-5/10 font-bold">ID</TableHead>
-            <TableHead className="text-left w-4/10 font-bold">Name</TableHead>
+            <TableHead className="text-left w-5/10 font-medium">ID</TableHead>
+            <TableHead className="text-left w-4/10 font-medium">Name</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

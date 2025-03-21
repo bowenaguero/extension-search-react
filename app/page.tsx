@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { getExtensionIds } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import { ChevronsRight, Loader2 } from "lucide-react";
+import { ChevronsRight, Loader2, CircleAlert } from "lucide-react";
 import ExtensionIdTable from "@/components/table/ExtensionIdTable";
 
 export default function Home() {
@@ -54,9 +54,9 @@ export default function Home() {
         <div className="flex h-full w-full gap-12">
           <div className="flex flex-col gap-8 border border-gray-300 rounded-sm p-8 w-150 shadow-lg">
             <div className="flex flex-col gap-2">
-              <h1 className="text-4xl font-bold">Add IDs</h1>
+              <h1 className="text-4xl font-bold">Extension IDs</h1>
               <p className="text-gray-500">
-                Extensions IDs are automatically parsed.
+                Paste text containing extension IDs.
               </p>
             </div>
             <div className="flex flex-col gap-4 w-full">
@@ -70,15 +70,15 @@ export default function Home() {
                   }}
                 />
               </div>
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-row gap-4">
                 <button
-                  className="rounded-sm p-2 hover:bg-gray-900 bg-black text-white hover:cursor-pointer w-full"
+                  className="rounded-sm p-2 hover:bg-gray-900 bg-black text-white font-medium hover:cursor-pointer w-full"
                   onClick={() => handleSubmit()}
                 >
                   Submit
                 </button>
                 <button
-                  className="rounded-sm p-2 hover:bg-gray-100 bg-white border border-gray-300 text-black hover:cursor-pointer w-full"
+                  className="rounded-sm p-2 hover:bg-gray-100 bg-white border border-gray-300 text-black font-medium hover:cursor-pointer w-full"
                   onClick={() => handleClear()}
                 >
                   Clear
@@ -98,7 +98,12 @@ export default function Home() {
               {extensionData.length > 0 ? (
                 <ExtensionIdTable extensionData={extensionData} />
               ) : (
-                <p className="text-gray-500 text-sm pb-25">Upload extension IDs to view results.</p>
+                <div className="flex gap-1 items-center">
+                  <CircleAlert className="w-4 h-4 font-medium" />
+                  <p className="text-sm font-medium">
+                    Upload extension IDs to view results.
+                  </p>
+                </div>
               )}
             </div>
           </div>
