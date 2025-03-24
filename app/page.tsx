@@ -13,6 +13,7 @@ export default function Home() {
     title: string;
   }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(1)
 
   const handleChange = (text: string) => {
     const extensionIds = getExtensionIds(text);
@@ -29,19 +30,30 @@ export default function Home() {
 
   const handleSubmit = () => {
     setLoading(true);
-    fetch("/api/get_extension_data", {
-      method: "POST",
-      body: JSON.stringify({ extensionIds: extensionIds }),
+    setExtensionData([]);
+    setProgress(1);
+    
+    const fetches: Promise<unknown>[] = [];
+    extensionIds.map(async (id) => {
+      fetches.push(fetch("/api/get_extension_data", {
+        method: "POST",
+        body: JSON.stringify({ id: id }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setExtensionData((prevState) => [...prevState, data]);
+        })
+        .finally(() => {
+          setProgress((prevState) => prevState + 1)
+          console.log(progress)
+        }))
     })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setExtensionData(data.extensionData);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+
+    Promise.all(fetches).then(() => {
+      setLoading(false);
+    });
   };
 
   return (
@@ -88,7 +100,10 @@ export default function Home() {
           </div>
           <div className="flex h-full text-gray-500 items-center">
             {loading ? (
-              <Loader2 className="h-10 w-10 animate-spin" />
+              <div className="flex flex-col items-center justify-center gap-2">
+                <Loader2 className="h-10 w-10 animate-spin" />
+                <p>{progress}/{extensionIds.length + 1}</p>
+              </div>
             ) : (
               <ChevronsRight className="h-10 w-10" />
             )}
