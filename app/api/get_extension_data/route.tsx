@@ -9,6 +9,10 @@ export async function POST(request: Request) {
 
     const $ = cheerio.load(data);
     const title = $('title').text().split(' - ')[0];
+    let found = true;
+    if (title === "Chrome Web Store") {
+        found = false;
+    };
 
-    return new Response(JSON.stringify({id: id, title: title}));
+    return new Response(JSON.stringify({id: id, title: title, found: found}));
 }

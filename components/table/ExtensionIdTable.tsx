@@ -12,7 +12,7 @@ import { Chrome } from "lucide-react";
 export default function ExtensionIdTable({
   extensionData,
 }: {
-  extensionData: { id: string; title: string }[];
+  extensionData: { id: string; title: string; found: boolean }[];
 }) {
   return (
     <div className="overflow-y-scroll w-full h-full scrollbar-hide">
