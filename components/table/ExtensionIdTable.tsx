@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "../ui/table";
 import Link from "next/link";
-import { Chrome, X } from "lucide-react";
+import Image from "next/image";
 
 export default function ExtensionIdTable({
   extensionData,
@@ -30,7 +30,8 @@ export default function ExtensionIdTable({
               {data.found ? (
                 <>
                   <TableCell className="text-left">
-                    <Chrome className="w-4 h-4 text-gray-500" />
+                    {/* <Chromium className="w-4 h-4 text-gray-500" /> */}
+                    <Image src="/images/Chromium_Logo.svg" alt="Chromium" height={20} width={20}/>
                   </TableCell>
                   <TableCell className="text-left text-blue-800 hover:underline">
                     <Link
