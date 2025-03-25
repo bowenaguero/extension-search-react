@@ -12,6 +12,9 @@ export default function Home() {
     id: string;
     title: string;
     found: boolean;
+    browser: string;
+    url: string;
+    img_source: string
   }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(1)
@@ -53,6 +56,7 @@ export default function Home() {
 
     Promise.all(fetches).then(() => {
       setLoading(false);
+      console.log(extensionData)
     });
   };
 

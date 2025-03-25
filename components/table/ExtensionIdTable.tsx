@@ -13,7 +13,14 @@ import { X } from "lucide-react";
 export default function ExtensionIdTable({
   extensionData,
 }: {
-  extensionData: { id: string; title: string; found: boolean }[];
+  extensionData: {
+    id: string;
+    title: string;
+    found: boolean;
+    browser: string;
+    url: string;
+    img_source: string
+  }[];
 }) {
   return (
     <div className="overflow-y-scroll w-full h-full scrollbar-hide">
@@ -31,22 +38,20 @@ export default function ExtensionIdTable({
               {data.found ? (
                 <>
                   <TableCell className="text-left">
-                    {/* <Chromium className="w-4 h-4 text-gray-500" /> */}
-                    <Image src="/images/Chromium_Logo.svg" alt="Chromium" height={20} width={20}/>
+                    <Image
+                      src={data.img_source}
+                      alt={data.browser}
+                      height={20}
+                      width={20}
+                    />
                   </TableCell>
                   <TableCell className="text-left text-blue-800 hover:underline">
-                    <Link
-                      href={`https://chromewebstore.google.com/detail/${data.id}`}
-                      target="_blank"
-                    >
+                    <Link href={data.url} target="_blank">
                       {data.id}
                     </Link>
                   </TableCell>
                   <TableCell className="text-left text-blue-800 hover:underline">
-                  <Link
-                      href={`https://chromewebstore.google.com/detail/${data.id}`}
-                      target="_blank"
-                    >
+                    <Link href={data.url} target="_blank">
                       {data.title}
                     </Link>
                   </TableCell>
@@ -57,9 +62,11 @@ export default function ExtensionIdTable({
                     <X className="w-4 h-4 text-red-500" />
                   </TableCell>
                   <TableCell className="text-left text-red-500">
-                      {data.id}
+                    {data.id}
                   </TableCell>
-                  <TableCell className="text-left text-red-500">Not Found</TableCell>
+                  <TableCell className="text-left text-red-500">
+                    Not Found
+                  </TableCell>
                 </>
               )}
             </TableRow>
