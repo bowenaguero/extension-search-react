@@ -8,6 +8,7 @@ import {
 } from "../ui/table";
 import Link from "next/link";
 import Image from "next/image";
+import { X } from "lucide-react";
 
 export default function ExtensionIdTable({
   extensionData,
