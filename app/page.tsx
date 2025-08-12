@@ -115,16 +115,16 @@ export default function Home() {
           )}
         </div>
         <div className="flex h-full w-[35%] flex-col rounded-md border shadow-lg">
-          <div className="flex h-full w-full flex-col items-center justify-center px-0">
-            {extensionData.length > 0 ? (
-              <ExtensionIdTable extensionData={extensionData} />
-            ) : (
+          {extensionData.length > 0 ? (
+            <ExtensionIdTable extensionData={extensionData} />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-8">
               <p className="text-md flex items-center gap-1">
                 <CircleAlert />
                 Submit extension IDs to view results.
               </p>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

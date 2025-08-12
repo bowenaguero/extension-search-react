@@ -44,7 +44,7 @@ export default function ExtensionIdTable({
                 </>
               ) : (
                 <>
-                  <TableCell className="text-left">
+                  <TableCell className="flex items-center justify-center">
                     <X className="h-4 w-4 text-red-500" />
                   </TableCell>
                   <TableCell className="text-left text-red-500">
