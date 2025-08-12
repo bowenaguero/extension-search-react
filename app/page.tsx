@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import ExtensionIdTable from "@/components/table/ExtensionIdTable";
-import { Textarea } from "@/components/ui/textarea";
-import { getExtensionIds } from "@/lib/utils";
-import { ChevronsRight, Loader2, CircleAlert } from "lucide-react";
-import { useState } from "react";
+import ExtensionIdTable from '@/components/table/ExtensionIdTable';
+import { Textarea } from '@/components/ui/textarea';
+import { getExtensionIds } from '@/lib/utils';
+import { ChevronsRight, Loader2, CircleAlert } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,9 +28,9 @@ export default function Home() {
 
   const handleClear = () => {
     const extensionIds = document.getElementById(
-      "extensionIds",
+      'extensionIds',
     ) as HTMLInputElement;
-    extensionIds.value = "";
+    extensionIds.value = '';
     setExtensionIds([]);
   };
 
@@ -42,8 +42,8 @@ export default function Home() {
     const fetches: Promise<unknown>[] = [];
     extensionIds.map(async (id) => {
       fetches.push(
-        fetch("/api/get_extension_data", {
-          method: "POST",
+        fetch('/api/get_extension_data', {
+          method: 'POST',
           body: JSON.stringify({ id: id }),
         })
           .then((res) => {
@@ -66,10 +66,10 @@ export default function Home() {
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">
-      <div className="flex h-[25%] flex-col items-center justify-center gap-2">
+      <div className="flex h-[20%] flex-col items-center justify-center gap-2">
         <h1 className="text-5xl font-bold">Browser Extension Search</h1>
       </div>
-      <div className="flex h-[75%] w-full flex-grow flex-row items-center justify-center gap-8 pb-12">
+      <div className="flex h-[80%] w-full flex-grow flex-row items-center justify-center gap-8 pb-12">
         <div className="flex h-full w-[35%] flex-col gap-4 rounded-md border p-8 shadow-lg">
           <div className="flex h-full flex-col gap-4">
             <Textarea
