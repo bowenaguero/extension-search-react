@@ -1,7 +1,7 @@
-import { Table, TableBody, TableCell, TableRow } from "../ui/table";
-import { X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { Table, TableBody, TableCell, TableRow } from '../ui/table';
+import { X } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function ExtensionIdTable({
   extensionData,
