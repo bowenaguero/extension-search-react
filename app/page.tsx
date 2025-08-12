@@ -78,13 +78,13 @@ export default function Home() {
             />
             <div className="flex flex-row gap-4">
               <button
-                className="rounded-md hover:bg-gray-900 bg-black text-white font-medium hover:cursor-pointer w-full"
+                className="flex-grow rounded-md hover:bg-gray-900 bg-black text-white font-medium hover:cursor-pointer p-2"
                 onClick={() => handleSubmit()}
               >
                 Submit
               </button>
               <button
-                className="rounded-md hover:bg-gray-100 bg-white border text-black font-medium hover:cursor-pointer w-full"
+                className="flex-grow rounded-md hover:bg-gray-100 bg-white border text-black font-medium hover:cursor-pointer p-2"
                 onClick={() => handleClear()}
               >
                 Clear
