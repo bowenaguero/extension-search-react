@@ -2,8 +2,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "../ui/table";
 import Link from "next/link";
@@ -19,7 +17,7 @@ export default function ExtensionIdTable({
     found: boolean;
     browser: string;
     url: string;
-    img_source: string
+    img_source: string;
   }[];
 }) {
   return (

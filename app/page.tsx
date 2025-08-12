@@ -8,16 +8,18 @@ import ExtensionIdTable from "@/components/table/ExtensionIdTable";
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(1)
+  const [progress, setProgress] = useState<number>(1);
   const [extensionIds, setExtensionIds] = useState<string[]>([]);
-  const [extensionData, setExtensionData] = useState<{
-    id: string;
-    title: string;
-    found: boolean;
-    browser: string;
-    url: string;
-    img_source: string
-  }[]>([]);
+  const [extensionData, setExtensionData] = useState<
+    {
+      id: string;
+      title: string;
+      found: boolean;
+      browser: string;
+      url: string;
+      img_source: string;
+    }[]
+  >([]);
 
   const handleChange = (text: string) => {
     const extensionIds = getExtensionIds(text);
@@ -26,7 +28,7 @@ export default function Home() {
 
   const handleClear = () => {
     const extensionIds = document.getElementById(
-      "extensionIds"
+      "extensionIds",
     ) as HTMLInputElement;
     extensionIds.value = "";
     setExtensionIds([]);
@@ -39,37 +41,39 @@ export default function Home() {
 
     const fetches: Promise<unknown>[] = [];
     extensionIds.map(async (id) => {
-      fetches.push(fetch("/api/get_extension_data", {
-        method: "POST",
-        body: JSON.stringify({ id: id }),
-      })
-        .then((res) => {
-          return res.json();
+      fetches.push(
+        fetch("/api/get_extension_data", {
+          method: "POST",
+          body: JSON.stringify({ id: id }),
         })
-        .then((data) => {
-          setExtensionData((prevState) => [...prevState, data]);
-        })
-        .finally(() => {
-          setProgress((prevState) => prevState + 1)
-        }))
-    })
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            setExtensionData((prevState) => [...prevState, data]);
+          })
+          .finally(() => {
+            setProgress((prevState) => prevState + 1);
+          }),
+      );
+    });
 
     Promise.all(fetches).then(() => {
       setLoading(false);
-      console.log(extensionData)
+      console.log(extensionData);
     });
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="gap-2 flex h-[25%] flex-col items-center justify-center">
+    <div className="flex h-screen flex-col items-center justify-center">
+      <div className="flex h-[25%] flex-col items-center justify-center gap-2">
         <h1 className="text-5xl font-bold">Browser Extension Search</h1>
       </div>
-      <div className="flex flex-row flex-grow h-[75%] w-full items-center justify-center gap-8 pb-12">
-        <div className="flex flex-col w-[35%] h-full border rounded-md shadow-lg p-8 gap-4">
-          <div className="flex flex-col h-full gap-4">
+      <div className="flex h-[75%] w-full flex-grow flex-row items-center justify-center gap-8 pb-12">
+        <div className="flex h-full w-[35%] flex-col gap-4 rounded-md border p-8 shadow-lg">
+          <div className="flex h-full flex-col gap-4">
             <Textarea
-              className="h-full border rounded-md resize-none"
+              className="h-full resize-none rounded-md border"
               id="extensionIds"
               placeholder="Paste your extension IDs here"
               onChange={(e) => {
@@ -78,13 +82,13 @@ export default function Home() {
             />
             <div className="flex flex-row gap-4">
               <button
-                className="flex-grow rounded-md hover:bg-gray-900 bg-black text-white font-medium hover:cursor-pointer p-2"
+                className="flex-grow rounded-md bg-black p-2 font-medium text-white hover:cursor-pointer hover:bg-gray-900"
                 onClick={() => handleSubmit()}
               >
                 Submit
               </button>
               <button
-                className="flex-grow rounded-md hover:bg-gray-100 bg-white border text-black font-medium hover:cursor-pointer p-2"
+                className="flex-grow rounded-md border bg-white p-2 font-medium text-black hover:cursor-pointer hover:bg-gray-100"
                 onClick={() => handleClear()}
               >
                 Clear
@@ -97,24 +101,28 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center gap-2">
               <Loader2 className="h-10 w-10 animate-spin" />
               <p className="">{extensionIds[progress]}</p>
-              <p className="text-gray-500">{progress}/{extensionIds.length}</p>
+              <p className="text-gray-500">
+                {progress}/{extensionIds.length}
+              </p>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center gap-2">
               <ChevronsRight className="h-10 w-10" />
-              <p className="text-sm font-medium">{extensionIds.length} Loaded</p>
+              <p className="text-sm font-medium">
+                {extensionIds.length} Loaded
+              </p>
             </div>
           )}
         </div>
-        <div className="flex flex-col h-full w-[35%] border rounded-md shadow-lg">
-          <div className="flex flex-col h-full w-full px-0 items-center justify-center">
+        <div className="flex h-full w-[35%] flex-col rounded-md border shadow-lg">
+          <div className="flex h-full w-full flex-col items-center justify-center px-0">
             {extensionData.length > 0 ? (
               <ExtensionIdTable extensionData={extensionData} />
             ) : (
-                <p className="flex gap-1 items-center text-md">
-                  <CircleAlert />
-                  Submit extension IDs to view results.
-                </p>
+              <p className="text-md flex items-center gap-1">
+                <CircleAlert />
+                Submit extension IDs to view results.
+              </p>
             )}
           </div>
         </div>
