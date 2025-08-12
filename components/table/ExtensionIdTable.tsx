@@ -1,9 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "../ui/table";
+import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import Link from "next/link";
 import Image from "next/image";
 import { X } from "lucide-react";
@@ -21,7 +16,7 @@ export default function ExtensionIdTable({
   }[];
 }) {
   return (
-    <div className="overflow-y-scroll w-full h-full scrollbar-hide">
+    <div className="scrollbar-hide h-full w-full overflow-y-scroll">
       <Table>
         <TableBody>
           {extensionData.map((data, index) => (
@@ -50,7 +45,7 @@ export default function ExtensionIdTable({
               ) : (
                 <>
                   <TableCell className="text-left">
-                    <X className="w-4 h-4 text-red-500" />
+                    <X className="h-4 w-4 text-red-500" />
                   </TableCell>
                   <TableCell className="text-left text-red-500">
                     {data.id}
