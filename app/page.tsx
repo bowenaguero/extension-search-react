@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { getExtensionIds } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
-import { ChevronsRight, Loader2, CircleAlert } from "lucide-react";
 import ExtensionIdTable from "@/components/table/ExtensionIdTable";
+import { Textarea } from "@/components/ui/textarea";
+import { getExtensionIds } from "@/lib/utils";
+import { ChevronsRight, Loader2, CircleAlert } from "lucide-react";
+import { useState } from "react";
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
