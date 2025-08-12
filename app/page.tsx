@@ -61,30 +61,30 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-12 font-sans">
+    <div className="flex flex-col items-center justify-center h-screen">
       <div className="gap-2 flex h-[25%] flex-col items-center justify-center">
         <h1 className="text-5xl font-bold">Browser Extension Search</h1>
       </div>
-      <div className="flex flex-row flex-grow h-[75%] w-full items-center justify-center gap-8">
-        <div className="flex flex-col w-[35%] h-full border border-gray-300 rounded-sm shadow-lg p-8 gap-4">
+      <div className="flex flex-row flex-grow h-[75%] w-full items-center justify-center gap-8 pb-12">
+        <div className="flex flex-col w-[35%] h-full border rounded-md shadow-lg p-8 gap-4">
           <div className="flex flex-col h-full gap-4">
             <Textarea
-              className="h-full border border-gray-300 rounded-sm resize-none"
+              className="h-full border rounded-md resize-none"
               id="extensionIds"
-              placeholder="Paste your extensions IDs here"
+              placeholder="Paste your extension IDs here"
               onChange={(e) => {
                 handleChange(e.target.value);
               }}
             />
             <div className="flex flex-row gap-4">
               <button
-                className="rounded-sm hover:bg-gray-900 bg-black text-white font-medium hover:cursor-pointer w-full"
+                className="rounded-md hover:bg-gray-900 bg-black text-white font-medium hover:cursor-pointer w-full"
                 onClick={() => handleSubmit()}
               >
                 Submit
               </button>
               <button
-                className="rounded-sm hover:bg-gray-100 bg-white border border-gray-300 text-black font-medium hover:cursor-pointer w-full"
+                className="rounded-md hover:bg-gray-100 bg-white border text-black font-medium hover:cursor-pointer w-full"
                 onClick={() => handleClear()}
               >
                 Clear
@@ -106,17 +106,15 @@ export default function Home() {
             </div>
           )}
         </div>
-        <div className="flex flex-col h-full w-[35%] border border-gray-300 rounded-sm shadow-lg">
+        <div className="flex flex-col h-full w-[35%] border rounded-md shadow-lg">
           <div className="flex flex-col h-full w-full px-0 items-center justify-center">
             {extensionData.length > 0 ? (
               <ExtensionIdTable extensionData={extensionData} />
             ) : (
-              <div className="flex gap-1 items-center">
-                <CircleAlert className="w-4 h-4 font-medium" />
-                <p className="text-sm font-medium">
-                  Upload extension IDs to view results.
+                <p className="flex gap-1 items-center text-md">
+                  <CircleAlert />
+                  Submit extension IDs to view results.
                 </p>
-              </div>
             )}
           </div>
         </div>
