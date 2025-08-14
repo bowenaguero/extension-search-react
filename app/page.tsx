@@ -10,6 +10,7 @@ import {
   Upload,
   Copy,
   Download,
+  Trash2,
 } from 'lucide-react';
 import { X } from 'lucide-react';
 import Image from 'next/image';
@@ -90,17 +91,26 @@ export default function Home() {
       <div className="flex h-[20%] flex-col items-center justify-center gap-2">
         <h1 className="text-5xl font-bold">Browser Extension Search</h1>
       </div>
-      <div className="flex h-[80%] w-full flex-grow flex-row items-center justify-center gap-8 pb-12">
+      <div className="flex w-full flex-grow flex-row items-center justify-center gap-8 pb-18">
         <div className="flex h-full w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg">
-          <div className="flex flex-row h-[6%] items-center justify-begin py-8 px-4 gap-6">
+          <div className="flex flex-row h-[6%] items-center justify-begin py-8 px-4 gap-2 font-light">
             <button
-              className="hover:cursor-pointer"
+              className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center"
               onClick={() => copyToClipboard(extensionIds.join('\n'))}
             >
-              <Copy />
+              <Copy size="1em" />
             </button>
-            <button className="hover:cursor-pointer">
-              <Upload />
+            <button
+              className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center"
+              onClick={() => copyToClipboard(extensionIds.join('\n'))}
+            >
+              <Upload size="1em" />
+            </button>
+            <button
+              className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center"
+              onClick={() => handleClear()}
+            >
+              <Trash2 size="1em" />
             </button>
           </div>
           <div className="flex h-full flex-col gap-8">
@@ -118,12 +128,6 @@ export default function Home() {
                 onClick={() => handleSubmit()}
               >
                 Submit
-              </button>
-              <button
-                className="flex-grow rounded-md border bg-white p-2 font-medium text-black hover:cursor-pointer hover:bg-gray-100"
-                onClick={() => handleClear()}
-              >
-                Clear
               </button>
             </div>
           </div>
@@ -149,12 +153,18 @@ export default function Home() {
         <div className="flex h-full w-[35%] flex-col rounded-md border shadow-lg">
           {extensionData.length > 0 ? (
             <div className="scrollbar-hide h-full w-full overflow-y-scroll">
-              <div className="flex flex-row h-[6%] items-center border-b justify-end py-8 px-4 gap-6">
-                <button className="hover:cursor-pointer">
-                  <Copy />
+              <div className="flex flex-row h-[6%] items-center border-b justify-end py-8 px-4 gap-2 font-light">
+                <button className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center">
+                  <Copy size="1em" />
                 </button>
-                <button className="hover:cursor-pointer">
-                  <Download />
+                <button className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center">
+                  <Download size="1em" />
+                </button>
+                <button
+                  className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center"
+                  onClick={() => handleClear()}
+                >
+                  <Trash2 size="1em" />
                 </button>
               </div>
               <Table>
