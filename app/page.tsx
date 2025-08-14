@@ -91,7 +91,7 @@ export default function Home() {
       <div className="flex h-[20%] flex-col items-center justify-center gap-2">
         <h1 className="text-5xl font-bold">Browser Extension Search</h1>
       </div>
-      <div className="flex w-full flex-grow flex-row items-center justify-center gap-8 pb-18">
+      <div className="flex h-[80%] w-full flex-grow flex-row items-center justify-center gap-8 pb-18">
         <div className="flex h-full w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg">
           <div className="flex flex-row h-[6%] items-center justify-begin py-8 px-4 gap-2 font-light">
             <button
@@ -173,23 +173,37 @@ export default function Home() {
                     <TableRow key={index}>
                       {data.found ? (
                         <>
-                          <TableCell className="flex items-center justify-center">
-                            <Image
-                              src={data.img_source}
-                              alt={data.browser}
-                              height={20}
-                              width={20}
-                            />
+                          <TableCell>
+                            <div className="flex items-center justify-center pl-3 p-1">
+                              <Image
+                                src={data.img_source}
+                                alt={data.browser}
+                                height={20}
+                                width={20}
+                              />
+                            </div>
                           </TableCell>
-                          <TableCell className="text-left text-blue-800 hover:underline">
-                            <Link href={data.url} target="_blank">
-                              {data.id}
-                            </Link>
+                          <TableCell>
+                            <div className="flex items-center justify-begin p-1">
+                              <Link
+                                href={data.url}
+                                target="_blank"
+                                className="text-blue-800 hover:underline"
+                              >
+                                {data.id}
+                              </Link>
+                            </div>
                           </TableCell>
-                          <TableCell className="text-left text-blue-800 hover:underline">
-                            <Link href={data.url} target="_blank">
-                              {data.title}
-                            </Link>
+                          <TableCell>
+                            <div className="flex max-w-xs items-center justify-begin p-1 overflow-hidden text-ellipsis">
+                              <Link
+                                href={data.url}
+                                target="_blank"
+                                className="text-blue-800 hover:underline"
+                              >
+                                {data.title}
+                              </Link>
+                            </div>
                           </TableCell>
                         </>
                       ) : (
@@ -213,7 +227,7 @@ export default function Home() {
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-8">
               <p className="text-md flex items-center gap-1">
-                <CircleAlert />
+                <CircleAlert size="1em" />
                 Submit extension IDs to view results.
               </p>
             </div>
