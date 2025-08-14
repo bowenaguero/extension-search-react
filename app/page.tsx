@@ -1,9 +1,19 @@
 'use client';
 
-import ExtensionIdTable from '@/components/table/ExtensionIdTable';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
 import { getExtensionIds } from '@/lib/utils';
-import { ChevronsRight, Loader2, CircleAlert } from 'lucide-react';
+import {
+  ChevronsRight,
+  Loader2,
+  CircleAlert,
+  Upload,
+  Copy,
+  Download,
+} from 'lucide-react';
+import { X } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function Home() {
@@ -64,14 +74,36 @@ export default function Home() {
     });
   };
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        console.log('Text copied to clipboard');
+      },
+      (err) => {
+        console.error('Could not copy text: ', err);
+      },
+    );
+  };
+
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <div className="flex h-[20%] flex-col items-center justify-center gap-2">
         <h1 className="text-5xl font-bold">Browser Extension Search</h1>
       </div>
       <div className="flex h-[80%] w-full flex-grow flex-row items-center justify-center gap-8 pb-12">
-        <div className="flex h-full w-[35%] flex-col gap-4 rounded-md border p-8 shadow-lg">
-          <div className="flex h-full flex-col gap-4">
+        <div className="flex h-full w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg">
+          <div className="flex flex-row h-[6%] items-center justify-begin py-8 px-4 gap-6">
+            <button
+              className="hover:cursor-pointer"
+              onClick={() => copyToClipboard(extensionIds.join('\n'))}
+            >
+              <Copy />
+            </button>
+            <button className="hover:cursor-pointer">
+              <Upload />
+            </button>
+          </div>
+          <div className="flex h-full flex-col gap-8">
             <Textarea
               className="h-full resize-none rounded-md border"
               id="extensionIds"
@@ -116,7 +148,58 @@ export default function Home() {
         </div>
         <div className="flex h-full w-[35%] flex-col rounded-md border shadow-lg">
           {extensionData.length > 0 ? (
-            <ExtensionIdTable extensionData={extensionData} />
+            <div className="scrollbar-hide h-full w-full overflow-y-scroll">
+              <div className="flex flex-row h-[6%] items-center border-b justify-end py-8 px-4 gap-6">
+                <button className="hover:cursor-pointer">
+                  <Copy />
+                </button>
+                <button className="hover:cursor-pointer">
+                  <Download />
+                </button>
+              </div>
+              <Table>
+                <TableBody>
+                  {extensionData.map((data, index) => (
+                    <TableRow key={index}>
+                      {data.found ? (
+                        <>
+                          <TableCell className="flex items-center justify-center">
+                            <Image
+                              src={data.img_source}
+                              alt={data.browser}
+                              height={20}
+                              width={20}
+                            />
+                          </TableCell>
+                          <TableCell className="text-left text-blue-800 hover:underline">
+                            <Link href={data.url} target="_blank">
+                              {data.id}
+                            </Link>
+                          </TableCell>
+                          <TableCell className="text-left text-blue-800 hover:underline">
+                            <Link href={data.url} target="_blank">
+                              {data.title}
+                            </Link>
+                          </TableCell>
+                        </>
+                      ) : (
+                        <>
+                          <TableCell className="flex items-center justify-center">
+                            <X className="h-4 w-4 text-red-500" />
+                          </TableCell>
+                          <TableCell className="text-left text-red-500">
+                            {data.id}
+                          </TableCell>
+                          <TableCell className="text-left text-red-500">
+                            Not Found
+                          </TableCell>
+                        </>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-8">
               <p className="text-md flex items-center gap-1">
