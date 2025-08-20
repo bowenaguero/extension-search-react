@@ -1,90 +1,27 @@
 'use client';
 
+import ToolbarLeft from '@/components/toolbar/ToolbarLeft';
+import ToolbarRight from '@/components/toolbar/ToolbarRight';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
-import { getExtensionIds } from '@/lib/utils';
-import {
-  ChevronsRight,
-  Loader2,
-  CircleAlert,
-  Upload,
-  Copy,
-  Download,
-  Trash2,
-} from 'lucide-react';
+import { useExtensionData } from '@/hooks/useExtensionData';
+import { ChevronsRight, Loader2, CircleAlert, Lock } from 'lucide-react';
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 
 export default function Home() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(1);
-  const [extensionIds, setExtensionIds] = useState<string[]>([]);
-  const [extensionData, setExtensionData] = useState<
-    {
-      id: string;
-      title: string;
-      found: boolean;
-      browser: string;
-      url: string;
-      img_source: string;
-    }[]
-  >([]);
-
-  const handleChange = (text: string) => {
-    const extensionIds = getExtensionIds(text);
-    setExtensionIds(extensionIds);
-  };
-
-  const handleClear = () => {
-    const extensionIds = document.getElementById(
-      'extensionIds',
-    ) as HTMLInputElement;
-    extensionIds.value = '';
-    setExtensionIds([]);
-  };
-
-  const handleSubmit = () => {
-    setLoading(true);
-    setExtensionData([]);
-    setProgress(1);
-
-    const fetches: Promise<unknown>[] = [];
-    extensionIds.map(async (id) => {
-      fetches.push(
-        fetch('/api/get_extension_data', {
-          method: 'POST',
-          body: JSON.stringify({ id: id }),
-        })
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            setExtensionData((prevState) => [...prevState, data]);
-          })
-          .finally(() => {
-            setProgress((prevState) => prevState + 1);
-          }),
-      );
-    });
-
-    Promise.all(fetches).then(() => {
-      setLoading(false);
-      console.log(extensionData);
-    });
-  };
-
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(
-      () => {
-        console.log('Text copied to clipboard');
-      },
-      (err) => {
-        console.error('Could not copy text: ', err);
-      },
-    );
-  };
+  const {
+    loading,
+    progress,
+    extensionIds,
+    extensionData,
+    setExtensionData,
+    setExtensionIds,
+    handleChange,
+    handleSubmit,
+    extensionIdLimitReached,
+  } = useExtensionData();
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">
@@ -93,26 +30,10 @@ export default function Home() {
       </div>
       <div className="flex h-[80%] w-full flex-grow flex-row items-center justify-center gap-8 pb-18">
         <div className="flex h-full w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg">
-          <div className="flex flex-row h-[6%] items-center justify-begin py-8 px-4 gap-2 font-light">
-            <button
-              className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center"
-              onClick={() => copyToClipboard(extensionIds.join('\n'))}
-            >
-              <Copy size="1em" />
-            </button>
-            <button
-              className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center"
-              onClick={() => copyToClipboard(extensionIds.join('\n'))}
-            >
-              <Upload size="1em" />
-            </button>
-            <button
-              className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center"
-              onClick={() => handleClear()}
-            >
-              <Trash2 size="1em" />
-            </button>
-          </div>
+          <ToolbarLeft
+            extensionIds={extensionIds}
+            setExtensionIds={setExtensionIds}
+          />
           <div className="flex h-full flex-col gap-8">
             <Textarea
               className="h-full resize-none rounded-md border"
@@ -123,12 +44,21 @@ export default function Home() {
               }}
             />
             <div className="flex flex-row gap-4">
-              <button
-                className="flex-grow rounded-md bg-black p-2 font-medium text-white hover:cursor-pointer hover:bg-gray-900"
-                onClick={() => handleSubmit()}
-              >
-                Submit
-              </button>
+              {extensionIdLimitReached ? (
+                <button className="flex-grow rounded-md bg-red-900 p-2 hover:cursor-pointer">
+                  <div className="flex items-center justify-center gap-2">
+                    <Lock className="text-white" size="1em" />
+                    <p className="font-medium text-white">Limit Reached</p>
+                  </div>
+                </button>
+              ) : (
+                <button
+                  className="flex-grow rounded-md bg-black p-2 font-medium text-white hover:cursor-pointer hover:bg-gray-900"
+                  onClick={() => handleSubmit()}
+                >
+                  Submit
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -144,29 +74,17 @@ export default function Home() {
           ) : (
             <div className="flex flex-col items-center justify-center gap-2">
               <ChevronsRight className="h-10 w-10" />
-              <p className="text-sm font-medium">
-                {extensionIds.length} Loaded
-              </p>
+              <p className="text-sm font-medium">{extensionIds.length} / 50</p>
             </div>
           )}
         </div>
         <div className="flex h-full w-[35%] flex-col rounded-md border shadow-lg">
           {extensionData.length > 0 ? (
             <div className="scrollbar-hide h-full w-full overflow-y-scroll">
-              <div className="flex flex-row h-[6%] items-center border-b justify-end py-8 px-4 gap-2 font-light">
-                <button className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center">
-                  <Copy size="1em" />
-                </button>
-                <button className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center">
-                  <Download size="1em" />
-                </button>
-                <button
-                  className="flex gap-2 hover:cursor-pointer text-md rounded-md hover:bg-gray-100 p-2 items-center"
-                  onClick={() => handleClear()}
-                >
-                  <Trash2 size="1em" />
-                </button>
-              </div>
+              <ToolbarRight
+                extensionData={extensionData}
+                setExtensionData={setExtensionData}
+              />
               <Table>
                 <TableBody>
                   {extensionData.map((data, index) => (
