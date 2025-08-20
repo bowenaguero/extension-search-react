@@ -102,7 +102,7 @@ export default function Home() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex items-center justify-begin p-1">
+                            <div className="flex items-center justify-start p-1">
                               <Link
                                 href={data.url}
                                 target="_blank"
