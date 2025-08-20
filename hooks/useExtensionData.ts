@@ -1,19 +1,11 @@
+import { Extensions } from '@/types';
 import { useEffect, useState } from 'react';
-
-interface extensions {
-  id: string;
-  title: string;
-  found: boolean;
-  browser: string;
-  url: string;
-  img_source: string;
-}
 
 export function useExtensionData() {
   const [loading, setLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(1);
   const [extensionIds, setExtensionIds] = useState<string[]>([]);
-  const [extensionData, setExtensionData] = useState<extensions[]>([]);
+  const [extensionData, setExtensionData] = useState<Extensions[]>([]);
   const [extensionIdLimitReached, setExtensionIdLimitReached] = useState(false);
 
   function parseExtensionIds(text: string) {

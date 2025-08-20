@@ -1,13 +1,13 @@
 import IconButton from '@/components/common/IconButton';
 import { useClipboard } from '@/hooks/useClipboard';
-import { extensions } from '@/types';
+import { Extensions } from '@/types';
 import { Download, Copy, Trash2 } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'sonner';
 
 interface ToolbarRightProps {
-  extensionData: extensions[];
-  setExtensionData: Dispatch<SetStateAction<extensions[]>>;
+  extensionData: Extensions[];
+  setExtensionData: Dispatch<SetStateAction<Extensions[]>>;
 }
 
 export default function ToolbarRight({
@@ -29,7 +29,7 @@ export default function ToolbarRight({
   };
 
   const downloadFile = () => {
-    const file = new File([JSON.stringify(extensionData)], `extensions.json`, {
+    const file = new File([JSON.stringify(extensionData)], `Extensions.json`, {
       type: 'text/plain',
     });
 
