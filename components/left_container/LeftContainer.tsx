@@ -36,7 +36,7 @@ export default function LeftContainer({
         <div className="flex flex-row gap-4">
           {extensionIdLimitReached ? (
             <button
-              className="flex-grow rounded-md bg-red-900 p-2 cursor-not-allowed"
+              className="flex-grow rounded-md bg-red-900 p-2 cursor-not-allowed opacity-50"
               disabled
             >
               <div className="flex items-center justify-center gap-2">
