@@ -14,8 +14,9 @@ export default function ExtensionDataTable({
   return (
     <Table>
       <TableBody>
-        {extensionData.map((data) => (
-          <TableRow key={data.id}>
+        {extensionData.map((data, index) => (
+          <TableRow key={`${data.id}-${index}`}>
+
             {data.found ? (
               <>
                 <TableCell>
