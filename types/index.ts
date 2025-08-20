@@ -1,4 +1,4 @@
-export interface extensions {
+export interface Extensions {
   id: string;
   title: string;
   found: boolean;

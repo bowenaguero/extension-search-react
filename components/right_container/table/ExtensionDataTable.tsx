@@ -1,11 +1,11 @@
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { extensions } from '@/types';
+import { Extensions } from '@/types';
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 interface ExtensionDataTableProps {
-  extensionData: extensions[];
+  extensionData: Extensions[];
 }
 
 export default function ExtensionDataTable({
@@ -14,8 +14,8 @@ export default function ExtensionDataTable({
   return (
     <Table>
       <TableBody>
-        {extensionData.map((data, index) => (
-          <TableRow key={index}>
+        {extensionData.map((data) => (
+          <TableRow key={data.id}>
             {data.found ? (
               <>
                 <TableCell>
@@ -29,7 +29,7 @@ export default function ExtensionDataTable({
                   </div>
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center justify-begin p-1">
+                  <div className="flex items-center justify-start p-1">
                     <Link
                       href={data.url}
                       target="_blank"
@@ -40,7 +40,7 @@ export default function ExtensionDataTable({
                   </div>
                 </TableCell>
                 <TableCell>
-                  <div className="flex max-w-xs items-center justify-begin p-1 overflow-hidden text-ellipsis">
+                  <div className="flex max-w-xs items-center justify-start p-1 overflow-hidden text-ellipsis">
                     <Link
                       href={data.url}
                       target="_blank"
