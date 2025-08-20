@@ -54,7 +54,7 @@ export default function ToolbarRight({
   };
 
   return (
-    <div className="flex flex-row h-[6%] items-center justify-begin py-6 px-4 gap-2 font-light justify-end">
+    <div className="flex flex-row h-[6%] items-center py-6 px-4 gap-2 font-light justify-end">
       <IconButton onClick={() => handleCopyExtensionData()}>
         <Copy size="1em" />
       </IconButton>
