@@ -1,17 +1,9 @@
 import IconButton from '@/components/common/IconButton';
 import { useClipboard } from '@/hooks/useClipboard';
+import { extensions } from '@/types';
 import { Download, Copy, Trash2 } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'sonner';
-
-interface extensions {
-  id: string;
-  title: string;
-  found: boolean;
-  browser: string;
-  url: string;
-  img_source: string;
-}
 
 interface ToolbarRightProps {
   extensionData: extensions[];
