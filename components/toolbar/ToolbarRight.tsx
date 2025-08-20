@@ -23,6 +23,7 @@ export default function ToolbarRight({
   setExtensionData,
 }: ToolbarRightProps) {
   const { copyToClipboard } = useClipboard();
+
   const handleCopyExtensionData = () => {
     if (extensionData.length > 0) {
       copyToClipboard(JSON.stringify(extensionData));
@@ -35,12 +36,29 @@ export default function ToolbarRight({
     toast.success('Extension data cleared');
   };
 
+  const downloadFile = () => {
+    const file = new File([JSON.stringify(extensionData)], `extensions.json`, {
+      type: 'text/plain',
+    });
+
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(file);
+
+    link.href = url;
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="flex flex-row h-[6%] items-center justify-begin py-6 px-4 gap-2 font-light justify-end">
       <IconButton onClick={() => handleCopyExtensionData()}>
         <Copy size="1em" />
       </IconButton>
-      <IconButton onClick={() => console.log('Download')}>
+      <IconButton onClick={() => downloadFile()}>
         <Download size="1em" />
       </IconButton>
       <IconButton onClick={() => handleExtensionDataCleared()}>
