@@ -29,7 +29,7 @@ export default function ToolbarRight({
   };
 
   const downloadFile = () => {
-    const file = new File([JSON.stringify(extensionData)], `extensions.json`, {
+    const file = new File([JSON.stringify(extensionData)], `Extensions.json`, {
       type: 'text/plain',
     });
 

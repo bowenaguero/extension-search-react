@@ -1,12 +1,12 @@
 import ExtensionDataTable from '@/components/right_container/table/ExtensionDataTable';
 import ToolbarRight from '@/components/toolbar/ToolbarRight';
-import { extensions } from '@/types';
+import { Extensions } from '@/types';
 import { CircleAlert } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
 
 interface RightContainerProps {
-  extensionData: extensions[];
-  setExtensionData: Dispatch<SetStateAction<extensions[]>>;
+  extensionData: Extensions[];
+  setExtensionData: Dispatch<SetStateAction<Extensions[]>>;
 }
 
 export default function RightContainer({
