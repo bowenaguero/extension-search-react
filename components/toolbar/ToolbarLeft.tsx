@@ -16,9 +16,6 @@ export default function ToolbarLeft({
   setExtensionIds,
 }: ToolbarLeftProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const extensionIdTextArea = document.getElementById(
-    'extensionIds',
-  ) as HTMLInputElement;
   const { copyToClipboard } = useClipboard();
 
   const handleUploadClick = () => {
@@ -28,6 +25,9 @@ export default function ToolbarLeft({
   };
 
   const handleClearExtensionIds = () => {
+    const extensionIdTextArea = document.getElementById(
+      'extensionIds',
+    ) as HTMLInputElement;
     extensionIdTextArea.value = '';
     setExtensionIds([]);
     toast.success('Extension IDs cleared');
@@ -44,6 +44,9 @@ export default function ToolbarLeft({
         return;
       }
       const text = await file.text();
+      const extensionIdTextArea = document.getElementById(
+        'extensionIds',
+      ) as HTMLInputElement;
       extensionIdTextArea.value = text;
     }
   }
