@@ -33,7 +33,10 @@ export default function ToolbarLeft({
     toast.success('Extension IDs cleared');
   };
 
-  async function handleFileChange(event: any) {
+  async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (!event.target.files) {
+      return;
+    }
     const file = event.target.files[0];
     if (file) {
       if (file.size > 10000) {

@@ -1,6 +1,6 @@
 interface ButtonProps {
   children: React.ReactNode;
-  onClick: any;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function IconButton({ children, onClick }: ButtonProps) {
