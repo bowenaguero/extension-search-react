@@ -113,7 +113,7 @@ export default function Home() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex max-w-xs items-center justify-begin p-1 overflow-hidden text-ellipsis">
+                            <div className="flex max-w-xs items-center justify-start p-1 overflow-hidden text-ellipsis">
                               <Link
                                 href={data.url}
                                 target="_blank"
