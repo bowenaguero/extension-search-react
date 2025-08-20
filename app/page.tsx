@@ -16,6 +16,8 @@ export default function Home() {
     handleChange,
     handleSubmit,
     extensionIdLimitReached,
+    text,
+    setText,
   } = useExtensionData();
 
   return (
@@ -30,6 +32,8 @@ export default function Home() {
           handleSubmit={handleSubmit}
           extensionIds={extensionIds}
           setExtensionIds={setExtensionIds}
+          text={text}
+          setText={setText}
         />
         <LoadingContainer
           loading={loading}

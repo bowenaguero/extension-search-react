@@ -2,35 +2,42 @@ import ToolbarLeft from '@/components/toolbar/ToolbarLeft';
 import { Textarea } from '@/components/ui/textarea';
 import { Lock } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
+import { ChangeEvent } from 'react';
 
 interface LeftContainerProps {
-  handleChange: (text: string) => void;
+  handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   extensionIdLimitReached: boolean;
   handleSubmit: () => void;
   extensionIds: string[];
   setExtensionIds: Dispatch<SetStateAction<string[]>>;
+  text: string;
+  setText: Dispatch<SetStateAction<string>>;
 }
 
 export default function LeftContainer({
-  handleChange,
   extensionIdLimitReached,
   handleSubmit,
   extensionIds,
   setExtensionIds,
+  handleChange,
+  text,
+  setText,
 }: LeftContainerProps) {
   return (
     <div className="flex h-full w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg">
       <ToolbarLeft
         extensionIds={extensionIds}
         setExtensionIds={setExtensionIds}
+        setText={setText}
       />
       <div className="flex h-full flex-col gap-8">
         <Textarea
           className="h-full resize-none rounded-md border"
           id="extensionIds"
+          value={text}
           placeholder="Paste your extension IDs here"
-          onChange={(e) => {
-            handleChange(e.target.value);
+          onChange={(event) => {
+            handleChange(event);
           }}
         />
         <div className="flex flex-row gap-4">

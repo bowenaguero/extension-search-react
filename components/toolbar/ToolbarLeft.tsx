@@ -9,11 +9,13 @@ import { toast } from 'sonner';
 interface ToolbarLeftProps {
   extensionIds: string[];
   setExtensionIds: Dispatch<SetStateAction<string[]>>;
+  setText: Dispatch<SetStateAction<string>>;
 }
 
 export default function ToolbarLeft({
   extensionIds,
   setExtensionIds,
+  setText,
 }: ToolbarLeftProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { copyToClipboard } = useClipboard();
@@ -25,10 +27,7 @@ export default function ToolbarLeft({
   };
 
   const handleClearExtensionIds = () => {
-    const extensionIdTextArea = document.getElementById(
-      'extensionIds',
-    ) as HTMLInputElement;
-    extensionIdTextArea.value = '';
+    setText('');
     setExtensionIds([]);
     toast.success('Extension IDs cleared');
   };
@@ -44,10 +43,7 @@ export default function ToolbarLeft({
         return;
       }
       const text = await file.text();
-      const extensionIdTextArea = document.getElementById(
-        'extensionIds',
-      ) as HTMLInputElement;
-      extensionIdTextArea.value = text;
+      setText(text);
     }
   }
 

@@ -1,5 +1,13 @@
+import { useDebounce } from '@/hooks/useDebounce';
 import { Extensions } from '@/types';
 import { useEffect, useState } from 'react';
+import { ChangeEvent } from 'react';
+
+function parseExtensionIds(text: string) {
+  const regex = new RegExp('[a-p]{32}', 'g');
+  const matches = text.match(regex);
+  return matches ? matches : [];
+}
 
 export function useExtensionData() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -7,16 +15,16 @@ export function useExtensionData() {
   const [extensionIds, setExtensionIds] = useState<string[]>([]);
   const [extensionData, setExtensionData] = useState<Extensions[]>([]);
   const [extensionIdLimitReached, setExtensionIdLimitReached] = useState(false);
+  const [text, setText] = useState('');
+  const debouncedText = useDebounce(text, 500);
 
-  function parseExtensionIds(text: string) {
-    const regex = new RegExp('[a-p]{32}', 'g');
-    const matches = text.match(regex);
-    return matches ? matches : [];
-  }
-
-  const handleChange = (text: string) => {
-    const extensionIds = parseExtensionIds(text);
+  useEffect(() => {
+    const extensionIds = parseExtensionIds(debouncedText);
     setExtensionIds(extensionIds);
+  }, [debouncedText]);
+
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setText(event.target.value);
   };
 
   const handleSubmit = () => {
@@ -67,5 +75,7 @@ export function useExtensionData() {
     handleChange,
     handleSubmit,
     extensionIdLimitReached,
+    text,
+    setText,
   };
 }
