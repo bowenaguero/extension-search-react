@@ -1,5 +1,6 @@
 import ToolbarLeft from '@/components/toolbar/ToolbarLeft';
 import { Textarea } from '@/components/ui/textarea';
+import { Extensions } from '@/types';
 import { Lock } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
 import { ChangeEvent } from 'react';
@@ -12,6 +13,7 @@ interface LeftContainerProps {
   setExtensionIds: Dispatch<SetStateAction<string[]>>;
   text: string;
   setText: Dispatch<SetStateAction<string>>;
+  extensionData: Extensions[];
 }
 
 export default function LeftContainer({
@@ -22,9 +24,12 @@ export default function LeftContainer({
   handleChange,
   text,
   setText,
+  extensionData,
 }: LeftContainerProps) {
   return (
-    <div className="flex h-full w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg">
+    <div
+      className={`${extensionData.length > 0 ? 'hidden md:block' : ''} flex h-full w-[80%] md:w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg`}
+    >
       <ToolbarLeft
         extensionIds={extensionIds}
         setExtensionIds={setExtensionIds}
@@ -32,7 +37,7 @@ export default function LeftContainer({
       />
       <div className="flex h-full flex-col gap-8">
         <Textarea
-          className="h-full resize-none rounded-md border"
+          className="h-full resize-none rounded-md border text-sm md:text-md"
           id="extensionIds"
           value={text}
           placeholder="Paste your extension IDs here"

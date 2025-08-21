@@ -14,7 +14,9 @@ export default function RightContainer({
   setExtensionData,
 }: RightContainerProps) {
   return (
-    <div className="flex h-full w-[35%] flex-col rounded-md border shadow-lg">
+    <div
+      className={`${extensionData.length > 0 ? '' : 'hidden md:block'} flex h-full w-[80%] md:w-[35%] flex-col rounded-md border shadow-lg`}
+    >
       {extensionData.length > 0 ? (
         <div className="scrollbar-hide h-full w-full overflow-y-scroll">
           <ToolbarRight

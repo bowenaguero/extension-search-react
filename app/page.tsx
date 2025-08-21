@@ -23,9 +23,13 @@ export default function Home() {
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <div className="flex h-[20%] flex-col items-center justify-center gap-2">
-        <h1 className="text-5xl font-bold">Browser Extension Search</h1>
+        <h1 className="text-2xl md:text-5xl font-bold">
+          Browser Extension Search
+        </h1>
       </div>
-      <div className="flex h-[80%] w-full flex-grow flex-row items-center justify-center gap-8 pb-18">
+      <div
+        className={`flex h-[80%] w-full flex-grow flex-col md:flex-row items-center justify-center gap-8 pb-18`}
+      >
         <LeftContainer
           handleChange={handleChange}
           extensionIdLimitReached={extensionIdLimitReached}
@@ -34,6 +38,7 @@ export default function Home() {
           setExtensionIds={setExtensionIds}
           text={text}
           setText={setText}
+          extensionData={extensionData}
         />
         <LoadingContainer
           loading={loading}

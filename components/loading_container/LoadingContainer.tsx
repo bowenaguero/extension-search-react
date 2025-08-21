@@ -12,7 +12,7 @@ export default function LoadingContainer({
   progress,
 }: LoadingContainerProps) {
   return (
-    <div className="flex items-center">
+    <div className="hidden md:block flex items-center">
       {loading ? (
         <div className="flex flex-col items-center justify-center gap-2">
           <Loader2 className="h-10 w-10 animate-spin" />
