@@ -35,7 +35,7 @@ export default function LeftContainer({
         setExtensionIds={setExtensionIds}
         setText={setText}
       />
-      <div className="flex h-full flex-col gap-8">
+      <div className="flex h-full flex-col gap-6">
         <Textarea
           className="h-full resize-none rounded-md border text-sm md:text-md"
           id="extensionIds"

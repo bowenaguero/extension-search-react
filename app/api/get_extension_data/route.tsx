@@ -1,6 +1,7 @@
+import { Store } from '@/types';
 import * as cheerio from 'cheerio';
 
-const stores = [
+const stores: Store[] = [
   {
     browser: 'Edge',
     url: 'https://microsoftedge.microsoft.com/addons/detail/',
@@ -13,52 +14,61 @@ const stores = [
   },
 ];
 
-async function checkStores(id: string) {
-  const result = {
-    id: id,
-    found: false,
-    title: '',
-    browser: '',
-    url: '',
-    img_source: '',
-  };
+async function checkStore(id: string, store: Store) {
+  // Set the store specific variables
+  const url = store.url;
+  const browser = store.browser;
+  const img_source = store.img_source;
 
-  for (let i = 0; i < stores.length; i++) {
-    const url = stores[i].url + id;
-    const browser = stores[i].browser;
-    const img = stores[i].img_source;
+  // Fetch the store page for the given extension ID
+  const response = await fetch(url + id);
+  const text = await response.text();
+  const $ = cheerio.load(text);
 
-    const response = await fetch(url);
-    const data = await response.text();
+  // Parse the title
+  const title = $('title').text().split(' - ')[0];
 
-    const $ = cheerio.load(data);
-    const title = $('title').text().split(' - ')[0];
-
-    if (
-      title === 'Microsoft Edge AddonsYour Privacy Choices Opt-Out Icon' ||
-      title === 'Chrome Web Store'
-    ) {
-      continue;
-    } else {
-      return {
-        id: id,
-        title: title,
-        found: true,
-        browser: browser,
-        url: url,
-        img_source: img,
-      };
-    }
+  // Was the extension ID not found?
+  if (
+    title === 'Chrome Web Store' ||
+    title === 'Microsoft Edge AddonsYour Privacy Choices Opt-Out Icon'
+  ) {
+    return {
+      id: id,
+      title: title,
+      url: url,
+      found: false,
+      browser: browser,
+      img_source: img_source,
+    };
   }
 
-  return result;
+  // Else, return the results
+  return {
+    id: id,
+    title: title,
+    url: url,
+    found: true,
+    browser: browser,
+    img_source: img_source,
+  };
+}
+
+async function processExtensionIds(ids: string[]) {
+  const promises: Promise<unknown>[] = [];
+
+  ids.map((id) => {
+    stores.map((store) => {
+      promises.push(checkStore(id, store));
+    });
+  });
+
+  return await Promise.all(promises);
 }
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const id = body.id;
-
-  const result = await checkStores(id);
-
+  const ids = body.ids;
+  const result = await processExtensionIds(ids);
   return new Response(JSON.stringify(result));
 }

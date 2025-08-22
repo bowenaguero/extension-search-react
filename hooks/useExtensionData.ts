@@ -11,7 +11,6 @@ function parseExtensionIds(text: string) {
 
 export function useExtensionData() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(1);
   const [extensionIds, setExtensionIds] = useState<string[]>([]);
   const [extensionData, setExtensionData] = useState<Extensions[]>([]);
   const [extensionIdLimitReached, setExtensionIdLimitReached] = useState(false);
@@ -27,33 +26,25 @@ export function useExtensionData() {
     setText(event.target.value);
   };
 
+  async function submitExtensionIds(extensionIds: string[]) {
+    await fetch('/api/get_extension_data', {
+      method: 'POST',
+      body: JSON.stringify({ ids: extensionIds }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((extensionData) => {
+        console.log(extensionData);
+        setExtensionData(extensionData);
+        setLoading(false);
+      });
+  }
+
   const handleSubmit = () => {
     setLoading(true);
     setExtensionData([]);
-    setProgress(1);
-
-    const fetches: Promise<unknown>[] = [];
-    extensionIds.map(async (id) => {
-      fetches.push(
-        fetch('/api/get_extension_data', {
-          method: 'POST',
-          body: JSON.stringify({ id: id }),
-        })
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            setExtensionData((prevState) => [...prevState, data]);
-          })
-          .finally(() => {
-            setProgress((prevState) => prevState + 1);
-          }),
-      );
-    });
-
-    Promise.all(fetches).then(() => {
-      setLoading(false);
-    });
+    submitExtensionIds(extensionIds);
   };
 
   useEffect(() => {
@@ -66,7 +57,6 @@ export function useExtensionData() {
 
   return {
     loading,
-    progress,
     setExtensionIds,
     extensionIds,
     setExtensionData,
