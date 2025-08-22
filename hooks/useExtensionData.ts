@@ -53,7 +53,6 @@ export function useExtensionData() {
 
     Promise.all(fetches).then(() => {
       setLoading(false);
-      console.log(extensionData);
     });
   };
 
