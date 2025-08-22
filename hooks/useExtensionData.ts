@@ -35,7 +35,6 @@ export function useExtensionData() {
         return res.json();
       })
       .then((extensionData) => {
-        console.log(extensionData);
         setExtensionData(extensionData);
         setLoading(false);
       });
@@ -44,7 +43,9 @@ export function useExtensionData() {
   const handleSubmit = () => {
     setLoading(true);
     setExtensionData([]);
-    submitExtensionIds(extensionIds);
+    if (extensionIds.length > 0 && extensionIds.length < 50) {
+      submitExtensionIds(extensionIds);
+    }
   };
 
   useEffect(() => {
