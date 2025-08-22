@@ -14,6 +14,7 @@ interface LeftContainerProps {
   text: string;
   setText: Dispatch<SetStateAction<string>>;
   extensionData: Extensions[];
+  loading: boolean;
 }
 
 export default function LeftContainer({
@@ -25,10 +26,11 @@ export default function LeftContainer({
   text,
   setText,
   extensionData,
+  loading,
 }: LeftContainerProps) {
   return (
     <div
-      className={`${extensionData.length > 0 ? 'hidden md:flex' : ''} flex h-full w-[80%] md:w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg`}
+      className={`${extensionData.length > 0 || loading === true ? 'hidden md:flex' : ''} flex h-full w-[80%] md:w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg`}
     >
       <ToolbarLeft
         extensionIds={extensionIds}

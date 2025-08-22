@@ -38,6 +38,7 @@ export default function Home() {
           text={text}
           setText={setText}
           extensionData={extensionData}
+          loading={loading}
         />
         <LoadingContainer loading={loading} extensionIds={extensionIds} />
         <RightContainer
