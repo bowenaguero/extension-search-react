@@ -28,7 +28,7 @@ export default function LeftContainer({
 }: LeftContainerProps) {
   return (
     <div
-      className={`${extensionData.length > 0 ? 'hidden md:block' : ''} flex h-full w-[80%] md:w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg`}
+      className={`${extensionData.length > 0 ? 'hidden md:flex' : ''} flex h-full w-[80%] md:w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg`}
     >
       <ToolbarLeft
         extensionIds={extensionIds}
