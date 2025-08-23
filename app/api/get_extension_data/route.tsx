@@ -59,7 +59,7 @@ function deduplicateExtensionData(
   extensionIds: string[],
   extensions: Extensions[],
 ) {
-  let deduplicatedResults: Extensions[] = [];
+  const deduplicatedResults: Extensions[] = [];
 
   extensionIds.map((extensionId) => {
     const matches = extensions.filter(
