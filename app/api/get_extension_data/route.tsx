@@ -1,4 +1,4 @@
-import { Store } from '@/types';
+import { Extensions, Store } from '@/types';
 import * as cheerio from 'cheerio';
 
 const stores: Store[] = [
@@ -15,7 +15,7 @@ const stores: Store[] = [
 ];
 
 async function checkStore(id: string, store: Store) {
-  // Set the store specific variables
+  // Set store specific variables
   const url = store.url;
   const browser = store.browser;
   const img_source = store.img_source;
@@ -33,6 +33,7 @@ async function checkStore(id: string, store: Store) {
     title === 'Chrome Web Store' ||
     title === 'Microsoft Edge AddonsYour Privacy Choices Opt-Out Icon'
   ) {
+    // No? Return false.
     return {
       id: id,
       title: title,
@@ -43,7 +44,7 @@ async function checkStore(id: string, store: Store) {
     };
   }
 
-  // Else, return the results
+  // Yes? return true.
   return {
     id: id,
     title: title,
@@ -54,8 +55,30 @@ async function checkStore(id: string, store: Store) {
   };
 }
 
+function deduplicateExtensionData(
+  extensionIds: string[],
+  extensions: Extensions[],
+) {
+  let deduplicatedResults: Extensions[] = [];
+
+  extensionIds.map((extensionId) => {
+    const matches = extensions.filter(
+      (extension) => extension.id === extensionId,
+    );
+
+    const successfulResult = matches.find((result) => result.found === true);
+    if (successfulResult) {
+      deduplicatedResults.push(successfulResult);
+    } else {
+      deduplicatedResults.push(matches[0]);
+    }
+  });
+
+  return deduplicatedResults;
+}
+
 async function processExtensionIds(ids: string[]) {
-  const promises: Promise<unknown>[] = [];
+  const promises: Promise<Extensions>[] = [];
 
   ids.map((id) => {
     stores.map((store) => {
@@ -63,7 +86,10 @@ async function processExtensionIds(ids: string[]) {
     });
   });
 
-  return await Promise.all(promises);
+  const results = await Promise.all(promises);
+  const deduplicatedResults = deduplicateExtensionData(ids, results);
+
+  return deduplicatedResults;
 }
 
 export async function POST(request: Request) {

@@ -8,7 +8,7 @@ export interface Extensions {
 }
 
 export interface Store {
-  browser: string;
+  browser: 'Edge' | 'Chrome';
   url: string;
   img_source: string;
 }
