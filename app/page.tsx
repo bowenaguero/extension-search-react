@@ -8,7 +8,6 @@ import { useExtensionData } from '@/hooks/useExtensionData';
 export default function Home() {
   const {
     loading,
-    progress,
     extensionIds,
     extensionData,
     setExtensionData,
@@ -39,12 +38,9 @@ export default function Home() {
           text={text}
           setText={setText}
           extensionData={extensionData}
-        />
-        <LoadingContainer
           loading={loading}
-          extensionIds={extensionIds}
-          progress={progress}
         />
+        <LoadingContainer loading={loading} extensionIds={extensionIds} />
         <RightContainer
           extensionData={extensionData}
           setExtensionData={setExtensionData}

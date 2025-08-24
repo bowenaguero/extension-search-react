@@ -6,3 +6,9 @@ export interface Extensions {
   url: string;
   img_source: string;
 }
+
+export interface Store {
+  browser: 'Edge' | 'Chrome';
+  url: string;
+  img_source: string;
+}

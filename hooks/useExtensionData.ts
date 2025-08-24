@@ -2,6 +2,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { Extensions } from '@/types';
 import { useEffect, useState } from 'react';
 import { ChangeEvent } from 'react';
+import { toast } from 'sonner';
 
 function parseExtensionIds(text: string) {
   const regex = new RegExp('[a-p]{32}', 'g');
@@ -11,7 +12,6 @@ function parseExtensionIds(text: string) {
 
 export function useExtensionData() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(1);
   const [extensionIds, setExtensionIds] = useState<string[]>([]);
   const [extensionData, setExtensionData] = useState<Extensions[]>([]);
   const [extensionIdLimitReached, setExtensionIdLimitReached] = useState(false);
@@ -27,34 +27,33 @@ export function useExtensionData() {
     setText(event.target.value);
   };
 
+  async function submitExtensionIds(extensionIds: string[]) {
+    try {
+      const res = await fetch('/api/get_extension_data', {
+        method: 'POST',
+        body: JSON.stringify({ ids: extensionIds }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`API request failed with status ${res.status}`);
+      }
+
+      const extensionData = await res.json();
+      setExtensionData(extensionData);
+    } catch (error) {
+      console.error('Failed to submit extension IDs:', error);
+      toast.error('Failed to submit extension IDs.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const handleSubmit = () => {
     setLoading(true);
     setExtensionData([]);
-    setProgress(1);
-
-    const fetches: Promise<unknown>[] = [];
-    extensionIds.map(async (id) => {
-      fetches.push(
-        fetch('/api/get_extension_data', {
-          method: 'POST',
-          body: JSON.stringify({ id: id }),
-        })
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            setExtensionData((prevState) => [...prevState, data]);
-          })
-          .finally(() => {
-            setProgress((prevState) => prevState + 1);
-          }),
-      );
-    });
-
-    Promise.all(fetches).then(() => {
-      setLoading(false);
-      console.log(extensionData);
-    });
+    if (extensionIds.length > 0 && extensionIds.length < 50) {
+      submitExtensionIds(extensionIds);
+    }
   };
 
   useEffect(() => {
@@ -67,7 +66,6 @@ export function useExtensionData() {
 
   return {
     loading,
-    progress,
     setExtensionIds,
     extensionIds,
     setExtensionData,
