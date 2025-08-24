@@ -2,6 +2,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { Extensions } from '@/types';
 import { useEffect, useState } from 'react';
 import { ChangeEvent } from 'react';
+import { toast } from 'sonner';
 
 function parseExtensionIds(text: string) {
   const regex = new RegExp('[a-p]{32}', 'g');
@@ -27,17 +28,24 @@ export function useExtensionData() {
   };
 
   async function submitExtensionIds(extensionIds: string[]) {
-    await fetch('/api/get_extension_data', {
-      method: 'POST',
-      body: JSON.stringify({ ids: extensionIds }),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((extensionData) => {
-        setExtensionData(extensionData);
-        setLoading(false);
+    try {
+      const res = await fetch('/api/get_extension_data', {
+        method: 'POST',
+        body: JSON.stringify({ ids: extensionIds }),
       });
+
+      if (!res.ok) {
+        throw new Error(`API request failed with status ${res.status}`);
+      }
+
+      const extensionData = await res.json();
+      setExtensionData(extensionData);
+    } catch (error) {
+      console.error('Failed to submit extension IDs:', error);
+      toast.error('Failed to submit extension IDs.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   const handleSubmit = () => {

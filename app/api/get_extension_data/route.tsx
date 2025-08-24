@@ -78,13 +78,9 @@ function deduplicateExtensionData(
 }
 
 async function processExtensionIds(ids: string[]) {
-  const promises: Promise<Extensions>[] = [];
-
-  ids.map((id) => {
-    stores.map((store) => {
-      promises.push(checkStore(id, store));
-    });
-  });
+  const promises: Promise<Extensions>[] = ids.flatMap((id) =>
+    stores.map((store) => checkStore(id, store)),
+  );
 
   const results = await Promise.all(promises);
   const deduplicatedResults = deduplicateExtensionData(ids, results);
