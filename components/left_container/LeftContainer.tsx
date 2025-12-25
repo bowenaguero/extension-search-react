@@ -7,7 +7,7 @@ import { ChangeEvent } from 'react';
 
 interface LeftContainerProps {
   handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
-  extensionIdLimitReached: boolean;
+  limitReached: boolean;
   handleSubmit: () => void;
   extensionIds: string[];
   setExtensionIds: Dispatch<SetStateAction<string[]>>;
@@ -18,7 +18,7 @@ interface LeftContainerProps {
 }
 
 export default function LeftContainer({
-  extensionIdLimitReached,
+  limitReached,
   handleSubmit,
   extensionIds,
   setExtensionIds,
@@ -30,7 +30,9 @@ export default function LeftContainer({
 }: LeftContainerProps) {
   return (
     <div
-      className={`${extensionData.length > 0 || loading === true ? 'hidden md:flex' : ''} flex h-full w-[80%] md:w-[35%] flex-col rounded-md border pb-8 px-8 shadow-lg`}
+      className={`${
+        extensionData.length === 0 && !loading ? 'flex' : 'hidden'
+      } md:flex h-full w-[80%] flex-col rounded-md border px-8 pb-8 shadow-lg md:w-[35%]`}
     >
       <ToolbarLeft
         extensionIds={extensionIds}
@@ -43,14 +45,12 @@ export default function LeftContainer({
           id="extensionIds"
           value={text}
           placeholder="Paste your extension IDs here"
-          onChange={(event) => {
-            handleChange(event);
-          }}
+          onChange={handleChange}
         />
         <div className="flex flex-row gap-4">
-          {extensionIdLimitReached ? (
+          {limitReached ? (
             <button
-              className="flex-grow rounded-md bg-red-900 p-2 cursor-not-allowed opacity-50"
+              className="flex-grow cursor-not-allowed rounded-md bg-red-900 p-2 opacity-50"
               disabled
             >
               <div className="flex items-center justify-center gap-2">
@@ -61,7 +61,7 @@ export default function LeftContainer({
           ) : (
             <button
               className="flex-grow rounded-md bg-black p-2 font-medium text-white hover:cursor-pointer hover:bg-gray-900"
-              onClick={() => handleSubmit()}
+              onClick={handleSubmit}
             >
               Submit
             </button>

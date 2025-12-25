@@ -14,7 +14,7 @@ export default function Home() {
     setExtensionIds,
     handleChange,
     handleSubmit,
-    extensionIdLimitReached,
+    limitReached,
     text,
     setText,
   } = useExtensionData();
@@ -22,16 +22,14 @@ export default function Home() {
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <div className="flex h-[20%] flex-col items-center justify-center gap-2">
-        <h1 className="text-2xl md:text-5xl font-bold">
+        <h1 className="text-2xl font-bold md:text-5xl">
           Browser Extension Search
         </h1>
       </div>
-      <div
-        className={`flex h-[80%] w-full flex-grow flex-col md:flex-row items-center justify-center gap-8 pb-18`}
-      >
+      <div className="flex h-[80%] w-full flex-grow flex-col items-center justify-center gap-8 pb-18 md:flex-row">
         <LeftContainer
           handleChange={handleChange}
-          extensionIdLimitReached={extensionIdLimitReached}
+          limitReached={limitReached}
           handleSubmit={handleSubmit}
           extensionIds={extensionIds}
           setExtensionIds={setExtensionIds}

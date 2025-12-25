@@ -54,7 +54,10 @@ export default function ExtensionDataTable({
             ) : (
               <>
                 <TableCell className="flex items-center justify-center">
-                  <X className="h-4 w-4 text-red-500" />
+                  <X
+                    className="h-4 w-4 text-red-500"
+                    data-testid="not-found-icon"
+                  />
                 </TableCell>
                 <TableCell className="text-left text-red-500">
                   {data.id}

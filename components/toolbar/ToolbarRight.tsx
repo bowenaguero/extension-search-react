@@ -1,5 +1,6 @@
 import IconButton from '@/components/common/IconButton';
 import { useClipboard } from '@/hooks/useClipboard';
+import { downloadJsonFile } from '@/lib/utils';
 import { Extensions } from '@/types';
 import { Download, Copy, Trash2 } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
@@ -16,44 +17,29 @@ export default function ToolbarRight({
 }: ToolbarRightProps) {
   const { copyToClipboard } = useClipboard();
 
-  const handleCopyExtensionData = () => {
-    if (extensionData.length > 0) {
-      copyToClipboard(JSON.stringify(extensionData));
-      toast.success('Extension data copied to clipboard');
-    }
+  const copyData = () => {
+    copyToClipboard(JSON.stringify(extensionData));
+    toast.success('Extension data copied to clipboard');
   };
 
-  const handleExtensionDataCleared = () => {
+  const clearData = () => {
     setExtensionData([]);
     toast.success('Extension data cleared');
   };
 
-  const downloadFile = () => {
-    const file = new File([JSON.stringify(extensionData)], `Extensions.json`, {
-      type: 'text/plain',
-    });
-
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(file);
-
-    link.href = url;
-    link.download = file.name;
-    document.body.appendChild(link);
-    link.click();
-
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+  const downloadData = () => {
+    downloadJsonFile(extensionData, 'Extensions.json');
   };
 
   return (
-    <div className="flex flex-row h-[6%] items-center py-6 px-4 gap-2 font-light justify-center">
-      <IconButton onClick={() => handleCopyExtensionData()}>
+    <div className="flex h-[6%] flex-row items-center justify-center gap-2 py-6 px-4 font-light">
+      <IconButton onClick={copyData}>
         <Copy size="1em" />
       </IconButton>
-      <IconButton onClick={() => downloadFile()}>
+      <IconButton onClick={downloadData}>
         <Download size="1em" />
       </IconButton>
-      <IconButton onClick={() => handleExtensionDataCleared()}>
+      <IconButton onClick={clearData}>
         <Trash2 size="1em" />
       </IconButton>
     </div>

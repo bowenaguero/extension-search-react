@@ -1,79 +1,84 @@
 import { useDebounce } from '@/hooks/useDebounce';
-import { Extensions } from '@/types';
+import {
+  Extensions,
+  parseExtensionIds,
+  MAX_EXTENSION_IDS,
+  DEBOUNCE_DELAY,
+  EXTENSION_ID_LENGTH,
+} from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { ChangeEvent } from 'react';
 import { toast } from 'sonner';
 
-function parseExtensionIds(text: string) {
-  const regex = new RegExp('[a-p]{32}', 'g');
-  const matches = text.match(regex);
-  return matches ? matches : [];
-}
-
 export function useExtensionData() {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [extensionIds, setExtensionIds] = useState<string[]>([]);
   const [extensionData, setExtensionData] = useState<Extensions[]>([]);
-  const [extensionIdLimitReached, setExtensionIdLimitReached] = useState(false);
+  const [limitReached, setLimitReached] = useState(false);
   const [text, setText] = useState('');
-  const debouncedText = useDebounce(text, 500);
+  const debouncedText = useDebounce(text, DEBOUNCE_DELAY);
 
   useEffect(() => {
-    const extensionIds = parseExtensionIds(debouncedText);
-    setExtensionIds(extensionIds);
+    const ids = parseExtensionIds(debouncedText);
+    setExtensionIds(ids);
+    if (ids.length > 0) {
+      console.log('[Extension IDs parsed]', {
+        count: ids.length,
+        ids: ids.map((id) => ({
+          id,
+          length: id.length,
+          isValidLength: id.length === EXTENSION_ID_LENGTH,
+        })),
+      });
+    }
   }, [debouncedText]);
+
+  useEffect(() => {
+    setLimitReached(extensionIds.length >= MAX_EXTENSION_IDS);
+  }, [extensionIds]);
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
   };
 
-  async function submitExtensionIds(extensionIds: string[]) {
+  const submitIds = async (ids: string[]) => {
     try {
       const res = await fetch('/api/get_extension_data', {
         method: 'POST',
-        body: JSON.stringify({ ids: extensionIds }),
+        body: JSON.stringify({ ids }),
       });
 
       if (!res.ok) {
-        throw new Error(`API request failed with status ${res.status}`);
+        throw new Error(`Request failed: ${res.status}`);
       }
 
-      const extensionData = await res.json();
-      setExtensionData(extensionData);
+      const data = await res.json();
+      setExtensionData(data);
     } catch (error) {
-      console.error('Failed to submit extension IDs:', error);
+      console.error('Submission failed:', error);
       toast.error('Failed to submit extension IDs.');
     } finally {
       setLoading(false);
     }
-  }
-
-  const handleSubmit = () => {
-    setLoading(true);
-    setExtensionData([]);
-    if (extensionIds.length > 0 && extensionIds.length < 50) {
-      submitExtensionIds(extensionIds);
-    }
   };
 
-  useEffect(() => {
-    if (extensionIds.length >= 50 && extensionIdLimitReached !== true) {
-      setExtensionIdLimitReached(true);
-    } else if (extensionIds.length < 50 && extensionIdLimitReached !== false) {
-      setExtensionIdLimitReached(false);
-    }
-  }, [extensionIds]);
+  const handleSubmit = () => {
+    if (extensionIds.length === 0) return;
+    setLoading(true);
+    setExtensionData([]);
+    submitIds(extensionIds);
+  };
 
   return {
     loading,
-    setExtensionIds,
     extensionIds,
-    setExtensionData,
     extensionData,
+    limitReached,
+    text,
     handleChange,
     handleSubmit,
-    extensionIdLimitReached,
-    text,
+    setExtensionData,
+    setExtensionIds,
     setText,
   };
 }
