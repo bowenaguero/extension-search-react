@@ -28,11 +28,11 @@ export default function LeftContainer({
   extensionData,
   loading,
 }: LeftContainerProps) {
-  const isVisible = extensionData.length === 0 && !loading;
-
   return (
     <div
-      className={`${isVisible ? 'md:flex' : 'hidden'} flex h-full w-[80%] flex-col rounded-md border px-8 pb-8 shadow-lg md:w-[35%]`}
+      className={`${
+        extensionData.length === 0 && !loading ? 'flex' : 'hidden'
+      } md:flex h-full w-[80%] flex-col rounded-md border px-8 pb-8 shadow-lg md:w-[35%]`}
     >
       <ToolbarLeft
         extensionIds={extensionIds}

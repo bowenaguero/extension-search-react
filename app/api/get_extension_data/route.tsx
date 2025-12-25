@@ -1,3 +1,4 @@
+import { deduplicateExtensionData } from '@/lib/utils';
 import { Extensions, STORES, STORE_ERROR_TITLES } from '@/types';
 import * as cheerio from 'cheerio';
 
@@ -35,30 +36,18 @@ async function lookupExtensionInStore(
 }
 
 // ------------------------------------------------------------------
-// Deduplication
-// ------------------------------------------------------------------
-
-function selectBestResults(
-  extensionIds: string[],
-  results: Extensions[],
-): Extensions[] {
-  return extensionIds.map((id) => {
-    const matches = results.filter((ext) => ext.id === id);
-    const found = matches.find((ext) => ext.found);
-    return found ?? matches[0];
-  });
-}
-
-// ------------------------------------------------------------------
 // API Handler
 // ------------------------------------------------------------------
 
 async function processExtensionIds(ids: string[]): Promise<Extensions[]> {
-  const lookups = ids.flatMap((id) =>
+  const uniqueIds = [...new Set(ids)];
+
+  const lookups = uniqueIds.flatMap((id) =>
     STORES.map((store) => lookupExtensionInStore(id, store)),
   );
   const results = await Promise.all(lookups);
-  return selectBestResults(ids, results);
+
+  return deduplicateExtensionData(uniqueIds, results);
 }
 
 export async function POST(request: Request) {
