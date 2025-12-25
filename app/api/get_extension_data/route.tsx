@@ -1,96 +1,68 @@
-import { Extensions, Store } from '@/types';
+import { Extensions, STORES, STORE_ERROR_TITLES } from '@/types';
 import * as cheerio from 'cheerio';
 
-const stores: Store[] = [
-  {
-    browser: 'Edge',
-    url: 'https://microsoftedge.microsoft.com/addons/detail/',
-    img_source: '/images/Edge_Logo.svg',
-  },
-  {
-    browser: 'Chrome',
-    url: 'https://chromewebstore.google.com/detail/',
-    img_source: '/images/Chrome_Logo.svg',
-  },
-];
+// ------------------------------------------------------------------
+// Store Lookup
+// ------------------------------------------------------------------
 
-async function checkStore(id: string, store: Store) {
-  // Set store specific variables
-  const url = store.url;
-  const browser = store.browser;
-  const img_source = store.img_source;
+interface StoreLookupResult {
+  id: string;
+  title: string;
+  found: boolean;
+  browser: Extensions['browser'];
+  url: string;
+  img_source: string;
+}
 
-  // Fetch the store page for the given extension ID
-  const response = await fetch(url + id);
-  const text = await response.text();
-  const $ = cheerio.load(text);
-
-  // Parse the title
+async function lookupExtensionInStore(
+  id: string,
+  store: (typeof STORES)[number],
+): Promise<StoreLookupResult> {
+  const response = await fetch(store.url + id);
+  const html = await response.text();
+  const $ = cheerio.load(html);
   const title = $('title').text().split(' - ')[0];
+  const isNotFound = title === STORE_ERROR_TITLES[store.browser];
 
-  // Was the extension ID not found?
-  if (
-    title === 'Chrome Web Store' ||
-    title === 'Microsoft Edge AddonsYour Privacy Choices Opt-Out Icon'
-  ) {
-    // No? Return false.
-    return {
-      id: id,
-      title: title,
-      url: url,
-      found: false,
-      browser: browser,
-      img_source: img_source,
-    };
-  }
-
-  // Yes? return true.
   return {
-    id: id,
-    title: title,
-    url: url,
-    found: true,
-    browser: browser,
-    img_source: img_source,
+    id,
+    title,
+    found: !isNotFound,
+    browser: store.browser,
+    url: store.url,
+    img_source: store.img_source,
   };
 }
 
-function deduplicateExtensionData(
+// ------------------------------------------------------------------
+// Deduplication
+// ------------------------------------------------------------------
+
+function selectBestResults(
   extensionIds: string[],
-  extensions: Extensions[],
-) {
-  const deduplicatedResults: Extensions[] = [];
-
-  extensionIds.map((extensionId) => {
-    const matches = extensions.filter(
-      (extension) => extension.id === extensionId,
-    );
-
-    const successfulResult = matches.find((result) => result.found === true);
-    if (successfulResult) {
-      deduplicatedResults.push(successfulResult);
-    } else {
-      deduplicatedResults.push(matches[0]);
-    }
+  results: Extensions[],
+): Extensions[] {
+  return extensionIds.map((id) => {
+    const matches = results.filter((ext) => ext.id === id);
+    const found = matches.find((ext) => ext.found);
+    return found ?? matches[0];
   });
-
-  return deduplicatedResults;
 }
 
-async function processExtensionIds(ids: string[]) {
-  const promises: Promise<Extensions>[] = ids.flatMap((id) =>
-    stores.map((store) => checkStore(id, store)),
+// ------------------------------------------------------------------
+// API Handler
+// ------------------------------------------------------------------
+
+async function processExtensionIds(ids: string[]): Promise<Extensions[]> {
+  const lookups = ids.flatMap((id) =>
+    STORES.map((store) => lookupExtensionInStore(id, store)),
   );
-
-  const results = await Promise.all(promises);
-  const deduplicatedResults = deduplicateExtensionData(ids, results);
-
-  return deduplicatedResults;
+  const results = await Promise.all(lookups);
+  return selectBestResults(ids, results);
 }
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const ids = body.ids;
+  const { ids } = await request.json();
   const result = await processExtensionIds(ids);
   return new Response(JSON.stringify(result));
 }
