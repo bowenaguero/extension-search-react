@@ -1,6 +1,6 @@
 // Constants for extension ID parsing and limits
 export const EXTENSION_ID_LENGTH = 32;
-export const MAX_EXTENSION_IDS = 50;
+export const MAX_EXTENSION_IDS = 100;
 export const DEBOUNCE_DELAY = 500;
 
 // Extension ID regex pattern (Chrome/Edge: 32 chars, lowercase a-p only)

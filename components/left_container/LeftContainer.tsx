@@ -50,17 +50,17 @@ export default function LeftContainer({
         <div className="flex flex-row gap-4">
           {limitReached ? (
             <button
-              className="flex-grow cursor-not-allowed rounded-md bg-red-900 p-2 opacity-50"
+              className="flex-grow cursor-not-allowed rounded-md bg-destructive/80 p-2 opacity-50 dark:bg-destructive/60"
               disabled
             >
               <div className="flex items-center justify-center gap-2">
-                <Lock className="text-white" size="1em" />
-                <p className="font-medium text-white">Limit Reached</p>
+                <Lock className="text-destructive-foreground" size="1em" />
+                <p className="font-medium text-destructive-foreground">Limit Reached</p>
               </div>
             </button>
           ) : (
             <button
-              className="flex-grow rounded-md bg-black p-2 font-medium text-white hover:cursor-pointer hover:bg-gray-900"
+              className="flex-grow rounded-md bg-primary p-2 font-medium text-primary-foreground hover:cursor-pointer hover:bg-primary/90 dark:hover:bg-primary/80"
               onClick={handleSubmit}
             >
               Submit

@@ -74,7 +74,7 @@ Third extension: ${VALID_ID_1.slice(0, 16)}${VALID_ID_2.slice(0, 16)}`; // Valid
     expect(result[0]).toBe('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   });
 
-  it('extracts first 50 IDs from large input', () => {
+  it('extracts all 100 IDs from large input', () => {
     const input = Array(100).fill(VALID_ID_1).join(' ');
     const result = parseExtensionIds(input);
     expect(result).toHaveLength(100);
