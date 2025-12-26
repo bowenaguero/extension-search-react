@@ -33,7 +33,7 @@ export default function ExtensionDataTable({
                     <Link
                       href={data.url}
                       target="_blank"
-                      className="text-blue-800 hover:underline"
+                      className="text-primary hover:underline dark:text-primary/90"
                     >
                       {data.id}
                     </Link>
@@ -44,7 +44,7 @@ export default function ExtensionDataTable({
                     <Link
                       href={data.url}
                       target="_blank"
-                      className="text-blue-800 hover:underline"
+                      className="text-primary hover:underline dark:text-primary/90"
                     >
                       {data.title}
                     </Link>
@@ -55,14 +55,14 @@ export default function ExtensionDataTable({
               <>
                 <TableCell className="flex items-center justify-center">
                   <X
-                    className="h-4 w-4 text-red-500"
+                    className="h-4 w-4 text-destructive"
                     data-testid="not-found-icon"
                   />
                 </TableCell>
-                <TableCell className="text-left text-red-500">
+                <TableCell className="text-left text-destructive">
                   {data.id}
                 </TableCell>
-                <TableCell className="text-left text-red-500">
+                <TableCell className="text-left text-destructive">
                   Not Found
                 </TableCell>
               </>

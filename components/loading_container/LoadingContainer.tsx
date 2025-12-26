@@ -1,3 +1,4 @@
+import { MAX_EXTENSION_IDS } from '@/types';
 import { Loader2, ChevronsRight } from 'lucide-react';
 
 interface LoadingContainerProps {
@@ -18,7 +19,7 @@ export default function LoadingContainer({
       ) : (
         <div className="hidden md:flex flex-col items-center justify-center">
           <ChevronsRight className="h-10 w-10" />
-          <p className="text-sm font-medium">{extensionIds.length} / 50</p>
+          <p className="text-sm font-medium">{extensionIds.length} / {MAX_EXTENSION_IDS}</p>
         </div>
       )}
     </div>
