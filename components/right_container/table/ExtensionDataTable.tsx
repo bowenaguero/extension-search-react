@@ -18,8 +18,9 @@ export default function ExtensionDataTable({
           <TableRow key={`${data.id}-${index}`}>
             {data.found ? (
               <>
-                <TableCell>
-                  <div className="flex items-center justify-center pl-3 p-1">
+                {/* Logo Column - Fixed width, always visible */}
+                <TableCell className="w-12 min-w-12 md:w-16 md:min-w-16">
+                  <div className="flex items-center justify-center p-1">
                     <Image
                       src={data.img_source}
                       alt={data.browser}
@@ -28,23 +29,31 @@ export default function ExtensionDataTable({
                     />
                   </div>
                 </TableCell>
-                <TableCell>
-                  <div className="flex items-center justify-start p-1">
+
+                {/* ID Column - Fixed width */}
+                <TableCell className="w-40 min-w-40 md:w-64 md:min-w-64">
+                  <div className="flex items-center justify-start p-1 min-w-0">
                     <Link
                       href={data.url}
                       target="_blank"
-                      className="text-primary hover:underline dark:text-primary/90"
+                      rel="noopener noreferrer"
+                      className="truncate block text-primary hover:underline dark:text-primary/90"
+                      title={data.id}
                     >
                       {data.id}
                     </Link>
                   </div>
                 </TableCell>
-                <TableCell>
-                  <div className="flex max-w-xs items-center justify-start p-1 overflow-hidden text-ellipsis">
+
+                {/* Title Column - Flexible width with ellipsis */}
+                <TableCell className="flex-1 min-w-0">
+                  <div className="flex items-center justify-start p-1 min-w-0">
                     <Link
                       href={data.url}
                       target="_blank"
-                      className="text-primary hover:underline dark:text-primary/90"
+                      rel="noopener noreferrer"
+                      className="truncate block text-primary hover:underline dark:text-primary/90"
+                      title={data.title}
                     >
                       {data.title}
                     </Link>
@@ -53,16 +62,27 @@ export default function ExtensionDataTable({
               </>
             ) : (
               <>
-                <TableCell className="flex items-center justify-center">
-                  <X
-                    className="h-4 w-4 text-destructive"
-                    data-testid="not-found-icon"
-                  />
+                {/* Not Found - Logo Column */}
+                <TableCell className="w-12 min-w-12 md:w-16 md:min-w-16">
+                  <div className="flex items-center justify-center">
+                    <X
+                      className="h-4 w-4 text-destructive"
+                      data-testid="not-found-icon"
+                    />
+                  </div>
                 </TableCell>
-                <TableCell className="text-left text-destructive">
-                  {data.id}
+
+                {/* Not Found - ID Column */}
+                <TableCell className="w-40 min-w-40 md:w-64 md:min-w-64">
+                  <div className="flex items-center justify-start p-1 min-w-0">
+                    <span className="truncate block text-left text-destructive" title={data.id}>
+                      {data.id}
+                    </span>
+                  </div>
                 </TableCell>
-                <TableCell className="text-left text-destructive">
+
+                {/* Not Found - Title Column */}
+                <TableCell className="flex-1 min-w-0 text-left text-destructive">
                   Not Found
                 </TableCell>
               </>
