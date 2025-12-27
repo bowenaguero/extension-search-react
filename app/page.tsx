@@ -13,7 +13,6 @@ export default function Home() {
     extensionData,
     setExtensionData,
     setExtensionIds,
-    handleChange,
     handleSubmit,
     limitReached,
     text,
@@ -31,7 +30,6 @@ export default function Home() {
         </div>
         <div className="flex h-[80%] w-full flex-grow flex-col items-center justify-center gap-8 pb-18 md:flex-row">
           <LeftContainer
-            handleChange={handleChange}
             limitReached={limitReached}
             handleSubmit={handleSubmit}
             extensionIds={extensionIds}
